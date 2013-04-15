@@ -1,0 +1,6 @@
+#!/usr/bin/env ruby
+
+require 'fyro-backer'
+
+fb = Fyro::Backer::App.new(ARGV[0])
+#fb.run
