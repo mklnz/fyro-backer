@@ -38,6 +38,11 @@ module Fyro::Backer
     def prepare_dir
       `mkdir -p #{self.full_output_path}`
     end
+    
+    def clean_up
+      
+      
+    end
   end
   
 end

@@ -1,0 +1,4 @@
+hostname: localhost
+user: test_user
+database: test_db
+output_dir: /tmp
