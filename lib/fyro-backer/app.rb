@@ -20,27 +20,25 @@ module Fyro::Backer
       month = Time.now.month.to_s
       "#{self.output_dir}/#{year}/#{month}"
     end
+    
+    def timestamp
+      Time.now.strftime("%Y%m%d_%H%M%S")
+    end
   
     def run
-      prepare_dir
-      
-      timestamp = Time.now.strftime("%Y%m%d_%H%M%S")
-    
-      dump_command = "pg_dump -U #{self.user} -h #{self.hostname} #{self.database} > /tmp/#{timestamp}.sql"
-      `#{dump_command}`
-      
-      `tar zcvf /tmp/#{timestamp}.tar.gz /tmp/#{timestamp}.sql`
-      `mv /tmp/#{timestamp}.tar.gz #{self.full_output_path}`
-      `rm /tmp/#{timestamp}.sql`
+      `mkdir -p #{self.full_output_path}`
+      dump_db
+      `tar zcvf /tmp/#{self.timestamp}.tar.gz /tmp/#{self.timestamp}.sql`
+      `mv /tmp/#{self.timestamp}.tar.gz #{self.full_output_path}`
+      `rm /tmp/#{self.timestamp}.sql`
     end
     
     private
-    def prepare_dir
-      `mkdir -p #{self.full_output_path}`
+    def dump_db
+      `pg_dump -U #{self.user} -h #{self.hostname} #{self.database} > /tmp/#{self.timestamp}.sql`
     end
     
     def clean_up
-      
       
     end
   end
