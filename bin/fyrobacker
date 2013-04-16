@@ -2,5 +2,4 @@
 
 require 'fyro-backer'
 
-fb = Fyro::Backer::App.new(ARGV[0])
-#fb.run
+Fyro::Backer::CLI.start(ARGV)

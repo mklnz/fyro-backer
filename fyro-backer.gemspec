@@ -8,8 +8,8 @@ Gem::Specification.new do |spec|
   spec.version       = Fyro::Backer::VERSION
   spec.authors       = ['Michael Shi']
   spec.email         = ['michael@shi.co.nz']
-  spec.description   = %q{TODO: Write a gem description}
-  spec.summary       = %q{TODO: Write a gem summary}
+  spec.description   = %q{FyroBacker is a simple PostgreSQL backup utility}
+  spec.summary       = %q{FyroBacker is a simple PostgreSQL backup utility}
   spec.homepage      = ''
   spec.license       = 'MIT'
 
@@ -19,6 +19,7 @@ Gem::Specification.new do |spec|
   spec.require_paths = ['lib']
   
   spec.add_dependency 'net-sftp', '~> 2.1.1'
+  spec.add_dependency 'thor', '~> 0.18.1'
 
   spec.add_development_dependency 'bundler', '~> 1.3'
   spec.add_development_dependency 'rake'

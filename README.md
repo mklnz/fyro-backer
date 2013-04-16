@@ -1,6 +1,6 @@
 # Fyro::Back
 
-TODO: Write a gem description
+FyroBacker is a simple PostgreSQL backup utility.
 
 ## Installation
 
