@@ -1,4 +1,3 @@
-require 'net/sftp'
 require 'yaml'
 
 module Fyro; end
@@ -8,10 +7,12 @@ module Fyro::Backer
   class App
     attr_accessor :hostname, :user, :database, :output_dir
   
-    def initialize(config_file)
-      config = YAML.load_file(config_file)
-      config.each do |key, value|
-        instance_variable_set("@#{key}", value)
+    def initialize(config_file = nil)
+      unless config_file.nil?
+        config = YAML.load_file(config_file)
+        config.each do |key, value|
+          instance_variable_set("@#{key}", value)
+        end
       end
     end
     
@@ -26,16 +27,24 @@ module Fyro::Backer
     end
   
     def run
-      `mkdir -p #{self.full_output_path}`
+      FileUtils.mkdir_p self.full_output_path
       dump_db
-      `tar zcvf /tmp/#{self.timestamp}.tar.gz /tmp/#{self.timestamp}.sql`
-      `mv /tmp/#{self.timestamp}.tar.gz #{self.full_output_path}`
-      `rm /tmp/#{self.timestamp}.sql`
+      compress
+      
+      FileUtils.mv("#{Dir.tmpdir}/#{self.timestamp}.zip", self.full_output_path)
+      FileUtils.rm("#{Dir.tmpdir}/#{self.timestamp}.sql")
+      clean_up
     end
     
     private
     def dump_db
-      `pg_dump -U #{self.user} -h #{self.hostname} #{self.database} > /tmp/#{self.timestamp}.sql`
+      `pg_dump -U #{self.user} -h #{self.hostname} #{self.database} > #{Dir.tmpdir}/#{self.timestamp}.sql`
+    end
+    
+    def compress
+      Zip::ZipFile.open("#{Dir.tmpdir}/#{self.timestamp}.zip", Zip::ZipFile::CREATE) do |zipfile|
+        zipfile.add("#{self.timestamp}.sql", "#{Dir.tmpdir}/#{self.timestamp}.sql")
+      end
     end
     
     def clean_up

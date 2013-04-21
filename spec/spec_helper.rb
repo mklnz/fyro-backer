@@ -1,6 +1,7 @@
 require 'fyro-backer'
 require 'debugger'
 require 'fakefs/spec_helpers'
+require 'timecop'
 
 include Fyro::Backer
 
