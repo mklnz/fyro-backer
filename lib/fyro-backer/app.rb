@@ -33,6 +33,7 @@ module Fyro::Backer
       
       FileUtils.mv("#{Dir.tmpdir}/#{self.timestamp}.zip", self.full_output_path)
       FileUtils.rm("#{Dir.tmpdir}/#{self.timestamp}.sql")
+      
       clean_up
     end
     
@@ -48,7 +49,26 @@ module Fyro::Backer
     end
     
     def clean_up
-      
+      # If this is the first backup of the month, then clean the folder 2 months earlier
+      if (Dir.entries(self.full_output_path).size - 2) == 1
+        
+        year = 2.months.ago.year.to_s
+        month = 2.months.ago.month.to_s
+        
+        clean_path = "#{self.output_dir}/#{year}/#{month}"
+        
+        if Dir.exists?(clean_path) && (Dir.entries(clean_path).size - 2) > 1
+          files_arr = Dir.entries(clean_path)
+          
+          files_arr.each do |f|
+            file = File.join(clean_path, f)
+            
+            if !File.directory?(file) && files_arr.last != f
+              File.delete(file) 
+            end
+          end
+        end
+      end
     end
   end
   

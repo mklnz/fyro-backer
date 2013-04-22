@@ -67,9 +67,14 @@ describe App do
       two_months_ago_year = 2.months.ago.year.to_s
       two_months_ago_month = 2.months.ago.month.to_s
       
-      Dir.chdir("#{@app.output_dir}/#{two_months_ago_year}/#{two_months_ago_month}")
-      Dir["**/*"].length.should eq(1)
-            
+      # Back up folder should now contain only 1 backup
+      (Dir.entries("#{@app.output_dir}/#{two_months_ago_year}/#{two_months_ago_month}").size - 2).should eq(1)
+      
+      # Second month untouched
+      one_month_ago_year = 1.month.ago.year.to_s
+      one_month_ago_month = 1.month.ago.month.to_s
+      (Dir.entries("#{@app.output_dir}/#{one_month_ago_year}/#{one_month_ago_month}").size - 2).should eq(28)
+      
       Timecop.return
     end
   end
