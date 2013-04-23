@@ -5,9 +5,11 @@ module Fyro; end
 module Fyro::Backer
   
   class App
-    attr_accessor :hostname, :user, :password, :database, :output_dir
+    attr_accessor :backup_time, :hostname, :user, :password, :database, :output_dir
   
     def initialize(config_file = nil)
+      self.backup_time = Time.now
+      
       unless config_file.nil?
         config = YAML.load_file(config_file)
         config.each do |key, value|
@@ -17,13 +19,13 @@ module Fyro::Backer
     end
     
     def full_output_path
-      year = Time.now.year.to_s
-      month = Time.now.month.to_s
+      year = self.backup_time.year.to_s
+      month = self.backup_time.month.to_s
       "#{self.output_dir}/#{year}/#{month}"
     end
     
     def timestamp
-      Time.now.strftime("%Y%m%d_%H%M%S")
+      self.backup_time.strftime("%Y%m%d_%H%M%S")
     end
   
     def run

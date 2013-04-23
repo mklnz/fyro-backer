@@ -47,6 +47,7 @@ describe App do
       Timecop.freeze(Time.now.beginning_of_month)
       
       28.times do
+        @app.backup_time = Time.now
         @app.run
         Timecop.freeze(1.day.from_now)
       end
@@ -55,12 +56,14 @@ describe App do
       Timecop.freeze(1.month.from_now.beginning_of_month)
       
       28.times do
+        @app.backup_time = Time.now
         @app.run
         Timecop.freeze(1.day.from_now)
       end
 
       # Jump to 3rd month
       Timecop.freeze(1.month.from_now.beginning_of_month)
+      @app.backup_time = Time.now
       @app.run
       
       # Should clean first month
