@@ -5,7 +5,7 @@ module Fyro; end
 module Fyro::Backer
   
   class App
-    attr_accessor :hostname, :user, :database, :output_dir
+    attr_accessor :hostname, :user, :password, :database, :output_dir
   
     def initialize(config_file = nil)
       unless config_file.nil?
@@ -39,7 +39,14 @@ module Fyro::Backer
     
     private
     def dump_db
-      `pg_dump -U #{self.user} -h #{self.hostname} #{self.database} > #{Dir.tmpdir}/#{self.timestamp}.sql`
+      segment = {}
+      if self.password.nil?
+        segment[:password] = nil
+      else
+        segment[:password] = " -W#{self.password}"
+      end
+      
+      `pg_dump -U #{self.user}#{segment[:password]} -h #{self.hostname} #{self.database} > #{Dir.tmpdir}/#{self.timestamp}.sql`
     end
     
     def compress
