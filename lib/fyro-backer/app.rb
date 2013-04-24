@@ -67,7 +67,7 @@ module Fyro::Backer
     
     def compress
       Zip::ZipFile.open("#{Dir.tmpdir}/#{self.output_format}.zip", Zip::ZipFile::CREATE) do |zipfile|
-        zipfile.add("#{self.output_format}.sql", "#{Dir.tmpdir}/##{self.output_format}.sql")
+        zipfile.add("#{self.output_format}.sql", "#{Dir.tmpdir}/#{self.output_format}.sql")
       end
     end
     
