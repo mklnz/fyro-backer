@@ -1,24 +1,19 @@
 # Fyro::Back
 
-FyroBacker is a simple PostgreSQL backup utility.
+FyroBacker is a simple DB backup utility.
 
 ## Installation
 
 Add this line to your application's Gemfile:
 
-    gem 'fyro-backer'
-
-And then execute:
-
-    $ bundle
-
-Or install it yourself as:
-
-    $ gem install fyro-backer
+    git clone https://github.com/mklnz/fyro-backer.git
+    cd fyro-backer && gem build fyro-backer.gemspec && gem install fyro-backer
 
 ## Usage
 
-TODO: Write usage instructions here
+    $ fyro-backer backup [config_file]
+
+    See spec/test_config.yml for sample config
 
 ## Contributing
 
