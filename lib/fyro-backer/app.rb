@@ -5,7 +5,7 @@ module Fyro; end
 module Fyro::Backer
   
   class App
-    attr_accessor :backup_time, :hostname, :user, :password, :database, :output_dir
+    attr_accessor :backup_time, :db_engine, :hostname, :user, :password, :database, :output_dir
   
     def initialize(config_file = nil)
       self.backup_time = Time.now
@@ -24,8 +24,9 @@ module Fyro::Backer
       "#{self.output_dir}/#{year}/#{month}"
     end
     
-    def timestamp
-      self.backup_time.strftime("%Y%m%d_%H%M%S")
+    def output_format
+      timestamp = self.backup_time.strftime("%Y%m%d_%H%M%S")
+      "#{timestamp}_#{self.database}"
     end
   
     def run
@@ -33,27 +34,40 @@ module Fyro::Backer
       dump_db
       compress
       
-      FileUtils.mv("#{Dir.tmpdir}/#{self.timestamp}.zip", self.full_output_path)
-      FileUtils.rm("#{Dir.tmpdir}/#{self.timestamp}.sql")
+      FileUtils.mv("#{Dir.tmpdir}/#{self.output_format}.zip", self.full_output_path)
+      FileUtils.rm("#{Dir.tmpdir}/#{self.output_format}.sql")
       
       clean_up
     end
     
     private
     def dump_db
-      segment = {}
-      if self.password.nil?
-        segment[:password] = nil
-      else
-        segment[:password] = " -W#{self.password}"
+      if self.db_engine == "postgresql"
+        segment = {}
+        if self.password.nil?
+          segment[:password] = nil
+        else
+          segment[:password] = " -W#{self.password}"
+        end
+      
+        `pg_dump -U #{self.user}#{segment[:password]} -h #{self.hostname} #{self.database} > #{Dir.tmpdir}/#{self.output_format}.sql`
       end
       
-      `pg_dump -U #{self.user}#{segment[:password]} -h #{self.hostname} #{self.database} > #{Dir.tmpdir}/#{self.timestamp}.sql`
+      if self.db_engine == "mysql"
+        segment = {}
+        if self.password.nil?
+          segment[:password] = nil
+        else
+          segment[:password] = " -p#{self.password}"
+        end
+        
+        `mysqldump -u #{self.user}#{segment[:password]} -h #{self.hostname} #{self.database} > #{Dir.tmpdir}/#{self.output_format}.sql`
+      end
     end
     
     def compress
-      Zip::ZipFile.open("#{Dir.tmpdir}/#{self.timestamp}.zip", Zip::ZipFile::CREATE) do |zipfile|
-        zipfile.add("#{self.timestamp}.sql", "#{Dir.tmpdir}/#{self.timestamp}.sql")
+      Zip::ZipFile.open("#{Dir.tmpdir}/#{self.output_format}.zip", Zip::ZipFile::CREATE) do |zipfile|
+        zipfile.add("#{self.output_format}.sql", "#{Dir.tmpdir}/##{self.output_format}.sql")
       end
     end
     

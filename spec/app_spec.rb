@@ -5,6 +5,7 @@ describe App do
   
   it "initializes with config" do
     app = App.new(test_config_path)
+    app.db_engine.should eq("postgresql")
     app.hostname.should eq("localhost")
     app.user.should eq("test_user")
     app.database.should eq("test_db")
@@ -21,10 +22,10 @@ describe App do
       @app.database = "test_db"
       @app.output_dir = Dir.tmpdir
       @app.stub(:dump_db) {
-        File.open("#{Dir.tmpdir}/#{@app.timestamp}.sql", "w") { |file| file.write("") }
+        File.open("#{Dir.tmpdir}/#{@app.output_format}.sql", "w") { |file| file.write("") }
       }
       @app.stub(:compress) {
-        File.open("#{Dir.tmpdir}/#{@app.timestamp}.zip", "w") { |file| file.write("") }
+        File.open("#{Dir.tmpdir}/#{@app.output_format}.zip", "w") { |file| file.write("") }
       }
     end
     
@@ -39,7 +40,7 @@ describe App do
       # Check month
       File.exist?("#{@app.output_dir}/#{year}/#{month}").should be_true
       # Check dump file
-      File.exist?("#{@app.output_dir}/#{year}/#{month}/#{@app.timestamp}.zip").should be_true
+      File.exist?("#{@app.output_dir}/#{year}/#{month}/#{@app.output_format}.zip").should be_true
     end
   
     it "cleans up old backups" do
