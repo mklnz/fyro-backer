@@ -1,6 +1,7 @@
 # Fyro::Back
 
 FyroBacker is a simple DB backup utility written in Ruby.
+PostgreSQL and MySQL are supported.
 
 ## Installation
     git clone https://github.com/mklnz/fyro-backer.git
@@ -11,6 +12,11 @@ FyroBacker is a simple DB backup utility written in Ruby.
     $ fyro-backer backup [config_file]
 
 See spec/test_config.yml for sample config
+
+## Scheduling
+
+Add the following to your crontab
+0 0 * * * /bin/bash -l -c 'fyrobacker backup /path/to/config.yml >> /path/to/backup.log'
 
 ## Contributing
 

@@ -8,7 +8,7 @@ Gem::Specification.new do |spec|
   spec.version       = Fyro::Backer::VERSION
   spec.authors       = ['Michael Shi']
   spec.email         = ['michael@shi.co.nz']
-  spec.description   = %q{FyroBacker is a simple DB backup utility}
+  spec.description   = %q{FyroBacker is a simple DB backup utility. Currently PostgreSQL and MySQL are supported. It can be set up to run through cron.}
   spec.summary       = %q{FyroBacker is a simple DB backup utility}
   spec.homepage      = 'https://github.com/mklnz/fyro-backer'
   spec.license       = 'MIT'
