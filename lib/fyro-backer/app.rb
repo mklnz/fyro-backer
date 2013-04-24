@@ -42,7 +42,6 @@ module Fyro::Backer
     
     private
     def dump_db
-<<<<<<< HEAD
       if self.db_engine == "postgresql"
         segment = {}
         if self.password.nil?
@@ -64,16 +63,6 @@ module Fyro::Backer
         
         `mysqldump -u #{self.user}#{segment[:password]} -h #{self.hostname} #{self.database} > #{Dir.tmpdir}/#{self.output_format}.sql`
       end
-=======
-      segment = {}
-      if self.password.nil?
-        segment[:password] = nil
-      else
-        segment[:password] = " -W#{self.password}"
-      end
-      
-      `pg_dump -U #{self.user}#{segment[:password]} -h #{self.hostname} #{self.database} > #{Dir.tmpdir}/#{self.timestamp}.sql`
->>>>>>> CLI implemented
     end
     
     def compress
