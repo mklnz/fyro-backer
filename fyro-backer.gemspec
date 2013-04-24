@@ -21,6 +21,7 @@ Gem::Specification.new do |spec|
   spec.add_dependency 'thor', '~> 0.18.1'
   spec.add_dependency 'active_support', '~> 3.0.0'
   spec.add_dependency 'rubyzip', '~> 0.9.9'
+  spec.add_dependency 'i18n', '~> 0.6.4'
 
   spec.add_development_dependency 'bundler', '~> 1.3'
   spec.add_development_dependency 'rake'
