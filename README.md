@@ -1,11 +1,8 @@
 # Fyro::Back
 
-FyroBacker is a simple DB backup utility.
+FyroBacker is a simple DB backup utility written in Ruby.
 
 ## Installation
-
-Add this line to your application's Gemfile:
-
     git clone https://github.com/mklnz/fyro-backer.git
     cd fyro-backer && gem build fyro-backer.gemspec && gem install fyro-backer
 
@@ -13,7 +10,7 @@ Add this line to your application's Gemfile:
 
     $ fyro-backer backup [config_file]
 
-    See spec/test_config.yml for sample config
+See spec/test_config.yml for sample config
 
 ## Contributing
 
