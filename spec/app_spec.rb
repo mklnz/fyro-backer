@@ -7,7 +7,7 @@ describe App do
     app = App.new(test_config_path)
     app.db_engine.should eq("postgresql")
     app.hostname.should eq("localhost")
-    app.user.should eq("test_user")
+    app.username.should eq("test_user")
     app.database.should eq("test_db")
     app.output_dir.should eq("/tmp")
   end
@@ -18,7 +18,7 @@ describe App do
     before(:each) do
       @app = App.new
       @app.hostname = "localhost"
-      @app.user = "test_user"
+      @app.username = "test_user"
       @app.database = "test_db"
       @app.output_dir = Dir.tmpdir
       @app.stub(:dump_db) {

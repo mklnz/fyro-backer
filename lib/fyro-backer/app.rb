@@ -5,7 +5,7 @@ module Fyro; end
 module Fyro::Backer
   
   class App
-    attr_accessor :backup_time, :db_engine, :hostname, :user, :password, :database, :output_dir
+    attr_accessor :backup_time, :db_engine, :hostname, :username, :password, :database, :output_dir
   
     def initialize(config_file = nil)
       self.backup_time = Time.now
@@ -43,14 +43,7 @@ module Fyro::Backer
     private
     def dump_db
       if self.db_engine == "postgresql"
-        segment = {}
-        if self.password.nil?
-          segment[:password] = nil
-        else
-          segment[:password] = " -W#{self.password}"
-        end
-      
-        `pg_dump -U #{self.user}#{segment[:password]} -h #{self.hostname} #{self.database} > #{Dir.tmpdir}/#{self.output_format}.sql`
+        `pg_dump -U #{self.username} -w -h #{self.hostname} #{self.database} > #{Dir.tmpdir}/#{self.output_format}.sql`
       end
       
       if self.db_engine == "mysql"
@@ -58,10 +51,10 @@ module Fyro::Backer
         if self.password.nil?
           segment[:password] = nil
         else
-          segment[:password] = " -p#{self.password}"
+          segment[:password] = " -p#{self.password} "
         end
         
-        `mysqldump -u #{self.user}#{segment[:password]} -h #{self.hostname} #{self.database} > #{Dir.tmpdir}/#{self.output_format}.sql`
+        `mysqldump -u #{self.username}#{segment[:password]}-h #{self.hostname} #{self.database} > #{Dir.tmpdir}/#{self.output_format}.sql`
       end
     end
     
